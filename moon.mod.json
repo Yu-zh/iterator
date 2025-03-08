@@ -1,0 +1,13 @@
+{
+  "name": "Yu-zh/iterator",
+  "version": "0.1.0",
+  "readme": "README.md",
+  "repository": "",
+  "license": "Apache-2.0",
+  "keywords": [
+    "external iterator",
+    "internal iterator",
+    "delimited continuation"
+  ],
+  "description": "A library for internal and external iterators"
+}
