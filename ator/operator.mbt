@@ -91,12 +91,11 @@ pub fn take[A](self : T[A], n : Int) -> T[A] {
 }
 
 ///|
-pub fn drop[A](self : T[A], n : Int) -> T[A] {
+pub fn drop[A](self : T[A], n : Int) -> Unit {
   let mut count = 0
   while count < n && self.next() is Some(_) {
     count += 1
   }
-  self
 }
 
 ///|
