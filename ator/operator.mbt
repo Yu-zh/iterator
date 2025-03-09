@@ -28,19 +28,15 @@ pub fn map[A, B](self : T[A], f : (A) -> B) -> T[B] {
 
 ///|
 pub fn filter[A](self : T[A], f : (A) -> Bool) -> T[A] {
-  fn ator() {
-    if self.next() is Some(a) {
+  fn() {
+    while self.next() is Some(a) {
       if f(a) {
-        Some(a)
-      } else {
-        ator()
+        break Some(a)
       }
     } else {
       None
     }
   }
-
-  ator
 }
 
 ///|
@@ -48,16 +44,17 @@ pub fn flat_map[A, B](self : T[A], f : (A) -> T[B]) -> T[B] {
   let mut inner : T[B]? = None
   fn() {
     for {
-      if inner is Some(inner_iter) {
-        if inner_iter.next() is Some(a) {
-          break Some(a)
-        } else {
-          inner = None
-        }
-      } else if self.next() is Some(a) {
-        inner = Some(f(a))
-      } else {
-        break None
+      match inner {
+        None =>
+          match self.next() {
+            None => break None
+            Some(a) => inner = Some(f(a))
+          }
+        Some(inner_iter) =>
+          match inner_iter.next() {
+            None => inner = None
+            Some(b) => break Some(b)
+          }
       }
     }
   }
