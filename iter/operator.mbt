@@ -1,6 +1,6 @@
 ///|
 pub fn empty[A]() -> T[A] {
-  fn { _ => IterEnd }
+  fn { _ => IterContinue }
 }
 
 ///|
