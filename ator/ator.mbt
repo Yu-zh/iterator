@@ -37,3 +37,17 @@ pub fn from_iter[A](iter : Iter[A]) -> T[A] {
     }
   }
 }
+
+///|
+pub fn iter[A](self : T[A]) -> @builtin.Iter[A] {
+  @builtin.Iter::new(fn {
+    yield_ =>
+      while self.next() is Some(a) {
+        if yield_(a) is IterEnd {
+          break IterEnd
+        }
+      } else {
+        IterContinue
+      }
+  })
+}
