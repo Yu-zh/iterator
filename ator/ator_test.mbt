@@ -92,3 +92,40 @@ test "map & filter & flat_map" {
   inspect!(it4().find(fn(x) { x.0 == 3 }), content="Some((3, 'a'))")
   inspect!(it4().find(fn(x) { x.0 == 4 }), content="None")
 }
+
+///|
+test "from_iter" {
+  let it1 = [(1, 'a'), (2, 'b'), (3, 'c')] |> @iter.from_array
+  let it2 = [(1, 'd'), (2, 'e'), (3, 'f')] |> @iter.from_array
+  let it3 = it1.drop(1).concat(it2.take(2))
+  let it4 = it1.take(2).concat(it2.drop(1))
+  let it5 = it2.take(1).concat(it1.drop(2))
+  let it6 = it1.take(0).concat(it2.take(0))
+  let it7 = it1.drop(0).concat(it2.drop(0))
+  let it8 = it2.take(4).concat(it1.take(4))
+  let it9 = it1.drop(4).concat(it2.drop(4))
+  assert_eq!((it1 |> from_iter).collect(), it1.collect())
+  assert_eq!((it2 |> from_iter).collect(), it2.collect())
+  assert_eq!((it3 |> from_iter).collect(), it3.collect())
+  assert_eq!((it4 |> from_iter).collect(), it4.collect())
+  assert_eq!((it5 |> from_iter).collect(), it5.collect())
+  assert_eq!((it6 |> from_iter).collect(), it6.collect())
+  assert_eq!((it7 |> from_iter).collect(), it7.collect())
+  assert_eq!((it8 |> from_iter).collect(), it8.collect())
+  assert_eq!((it9 |> from_iter).collect(), it9.collect())
+}
+
+///|
+test "from_iter 2" {
+  let it1 = [1, 2, 3] |> @iter.from_array
+  let it2 = fn {
+    (i : Int) => [(i, 'a'), (i, 'b'), (i, 'c')] |> @iter.from_array
+  }
+  let it3 = it1.flat_map(it2)
+  let it4 = it3.drop(1).take(7)
+  let it5 = it4.filter(fn(x) { x.0 == 2 }).map(fn(x) { x.1 })
+  assert_eq!((it1 |> from_iter).collect(), it1.collect())
+  assert_eq!((it3 |> from_iter).collect(), it3.collect())
+  assert_eq!((it4 |> from_iter).collect(), it4.collect())
+  assert_eq!((it5 |> from_iter).collect(), it5.collect())
+}
